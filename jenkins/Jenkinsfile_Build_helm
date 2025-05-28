@@ -1,0 +1,47 @@
+pipeline {
+    agent { 
+        label 'docker' 
+    }
+     tools {
+		jfrog 'jfrog-cli'
+        go '1.22.4'
+	}
+    parameters {
+        string(name: 'BUILDNAME', defaultValue: 'gogs', description: 'Build Name')
+    }
+    environment {
+        GOOGLE_CREDENTIALS = credentials('terraform_creds')
+    }
+    stages {
+        stage('Checkout') {
+             steps {
+                script {
+                    git branch: 'main', credentialsId: 'gitcreds', url: 'git@github.com:CapybaraDevOps/gogs-infrastructure.git'
+                }
+            }
+        }
+        stage('Compile') {
+            steps {
+                script {
+                    dir('helm/gogs-chart/gogs-chart') {
+                        sh "helm package ./ --version 1.${env.BUILD_NUMBER}.0"
+                    }
+                }
+            }
+        }
+        stage('Artifactory') {
+            steps {
+                script {
+                    def repo = "helm-${params.BUILDNAME}-local"
+                    jf "rt u --server-id=artifactory-docker /var/lib/jenkins/workspace/${env.JOB_NAME}/helm/gogs-chart/gogs-chart/gogsapp-1.${env.BUILD_NUMBER}.0.tgz ${repo}/gogsapp-1.${env.BUILD_NUMBER}.0.tgz"
+                    jf "rt bp --server-id=artifactory-docker"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

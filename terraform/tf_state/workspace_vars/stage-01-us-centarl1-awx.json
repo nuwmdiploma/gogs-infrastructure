@@ -1,0 +1,7 @@
+{
+    "env": "stage-01",
+    "app": "awx",
+    "project": "capybara-stage",
+    "region": "us-central1",
+    "zone": "us-central1-a"
+}

@@ -1,0 +1,12 @@
+# Local .terraform directories
+**/.terraform/*
+**/.terragrunt-cache/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.terraform.lock*
+*.tflint.hcl
+**/.vscode/*
+terraform/gogs-app/modules/gogs/helm/values-v1.yaml
+terraform/gogs-app/modules/gogs/values-v1.yaml
