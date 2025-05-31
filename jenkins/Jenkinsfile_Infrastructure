@@ -4,19 +4,19 @@ pipeline {
       terraform 'terraform'
     }
 	parameters {
-        choice(name: 'ENV', choices: [], description: 'Deployment environment')
+        string(name: 'BRANCH', defaultValue: '', description: 'Branch to pull changes')
 		string(name: 'ENV_VARIABLE', defaultValue: '', description: 'ENV Variable')
-		choice(name: 'REGION', choices: [], description: 'Select the region')
-        choice(name: 'ZONE', choices: [], description: 'Select the zone')
+		choice(name: 'REGION', choices: [us], description: 'Select the region')
+        choice(name: 'ZONE', choices: [central1], description: 'Select the zone')
         string(name: 'PROJECT_NAME', defaultValue: '', description: 'Project name')
         string(name: 'JFROG_REGISTRY', defaultValue: '', description: 'Jfrog registry domain')
         choice(name: 'JFROG_REPOSITORY', choices: [] , description: 'Jfrog registry domain')
-        string(name: 'JFROG_IMAGE_TAG', defaultValue: '', description: 'Gogs image tag')
+        string(name: 'JFROG_IMAGE_TAG', defaultValue: 'latest', description: 'Gogs image tag')
     }
     stages {
         stage('Checkout') { 
             steps {
-                git branch: '', credentialsId: '', url: ''
+                git branch: 'env.BRANCH', credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
             }
         }
         stage('Init and Plan'){
