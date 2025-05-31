@@ -6,6 +6,7 @@ pipeline {
         dockerTool 'docker'
 	}
     parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to pull changes')
         choice(name: 'ENV', choices: [], description: 'Deployment environment')
         string(name: 'BUILDNAME', defaultValue: '', description: 'Build Name')
     }
