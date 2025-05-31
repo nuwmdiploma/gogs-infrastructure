@@ -22,7 +22,7 @@ resource "google_compute_instance" "frog_jcr_instance" {
     source      = google_compute_disk.disk_jfrog_jcr.id
   }
 
-  # metadata_startup_script = file("${path.module}/startup-script.sh")
+  metadata_startup_script = file("${path.module}/startup-script.sh")
 
   metadata = {
     ssh-keys = "${var.region}-${var.app}-jfrog-jcr:${tls_private_key.ssh_key_jfrog_jcr.public_key_openssh}"
