@@ -32,7 +32,7 @@ pipeline {
         stage('Artifactory') {
             steps {
                 script {
-                    def repo = "helm-${params.BUILDNAME}-local"
+                    def repo = "helm-${params.BUILDNAME}"
                     jf "rt u --server-id=artifactory-docker /var/lib/jenkins/workspace/${env.JOB_NAME}/helm/gogs-chart/gogs-chart/gogsapp-1.${env.BUILD_NUMBER}.0.tgz ${repo}/gogsapp-1.${env.BUILD_NUMBER}.0.tgz"
                     jf "rt bp --server-id=artifactory-docker"
                 }
