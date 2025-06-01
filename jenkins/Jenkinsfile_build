@@ -7,13 +7,10 @@ pipeline {
 	}
     parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to pull changes')
-        // choice(name: 'ENV', choices: [], description: 'Deployment environment')
-        string(name: 'BUILDNAME', defaultValue: 'test', description: 'Build Name')
+        string(name: 'BUILDNAME', defaultValue: 'gogs', description: 'Build Name')
     }
     environment {
-        BUILD_NUMBER = 0
-        // ARTIFACTORY_URL = credentials('docker-registry-url')
-        // ARTIFACTORY_DOMAIN = credentials('docker-registry-domain')
+        ARTIFACTORY_URL = credentials('docker-registry-url')
     }
     stages {
         stage('Checkout') {
@@ -45,22 +42,22 @@ pipeline {
                 }
             }
         }
-        // stage('Docker Push') {
-        //  steps {
-        //         script {
-        //             def hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+        stage('Docker Push') {
+         steps {
+                script {
+                    def hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
 
-        //             def imageTag = "${env.ARTIFACTORY_URL}/${params.ENV}-${params.BUILDNAME}-go-local/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
-        //             sh "docker tag ${params.BUILDNAME}:$BUILD_NUMBER ${imageTag}"
-                    
-        //             withCredentials([usernamePassword(credentialsId: 'dcr-p-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        //                 sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ${env.ARTIFACTORY_DOMAIN}"
-        //                 sh "docker push ${imageTag}"
-        //                 sh "docker logout ${env.ARTIFACTORY_URL}"
-        //             }
-        //         }
-        //     }
-        // }
+                    def imageTag = "${env.ARTIFACTORY_URL}/${params.BUILDNAME}-go-local/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
+                    sh "docker tag ${params.BUILDNAME}:$BUILD_NUMBER ${imageTag}"
+
+                    withCredentials([usernamePassword(credentialsId: 'dcr-p-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ${env.ARTIFACTORY_URL}"
+                        sh "docker push ${imageTag}"
+                        sh "docker logout ${env.ARTIFACTORY_URL}"
+                    }
+                }
+            }
+        }
     }
     post {
         always {
