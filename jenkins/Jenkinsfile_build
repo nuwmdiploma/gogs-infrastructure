@@ -27,14 +27,21 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    git clone --depth 1 https://github.com/gogs/gogs.git gogs
-                    cd gogs
-                    go build -o gogs
+                        #!/usr/bin/env bash
+                        set -euxo pipefail
 
-                    mv ../jenkins/Dockerfile ../
-                    cd ..
-                    docker build -t ${params.BUILDNAME}:${BUILD_NUMBER} .
-                    '''
+                        # 1) Clone and build Gogs
+                        git clone --depth 1 https://github.com/gogs/gogs.git gogs
+                        cd gogs
+                        go build -o gogs
+
+                        # 2) Move the Dockerfile into the workspace root
+                        mv ../jenkins/Dockerfile ../
+                        cd ..
+
+                        # 3) Build the Docker image, using the Jenkins parameters as env vars
+                        docker build -t "${BUILDNAME}:${BUILD_NUMBER}" .
+                        '''
                 }
             }
         }
