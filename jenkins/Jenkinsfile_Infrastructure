@@ -4,29 +4,29 @@ pipeline {
       terraform 'terraform'
     }
 	parameters {
-        choice(name: 'ENV', choices: [], description: 'Deployment environment')
-		string(name: 'ENV_VARIABLE', defaultValue: '', description: 'ENV Variable')
-		choice(name: 'REGION', choices: [], description: 'Select the region')
-        choice(name: 'ZONE', choices: [], description: 'Select the zone')
-        string(name: 'PROJECT_NAME', defaultValue: '', description: 'Project name')
-        string(name: 'JFROG_REGISTRY', defaultValue: '', description: 'Jfrog registry domain')
-        choice(name: 'JFROG_REPOSITORY', choices: [] , description: 'Jfrog registry domain')
-        string(name: 'JFROG_IMAGE_TAG', defaultValue: '', description: 'Gogs image tag')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to pull changes')
+        choice(name: 'ENV', choices: ['DEV', 'STAGE', 'PROD'], description: 'Deployment environment')
+		choice(name: 'REGION', choices: [us], description: 'Select the region')
+        choice(name: 'ZONE', choices: [central1], description: 'Select the zone')
+        string(name: 'PROJECT_NAME', defaultValue: 'gogs', description: 'Project name')
+        string(name: 'JFROG_REGISTRY', defaultValue: 'jfrog.nuwm-diploma.pp.ua', description: 'Project name')
+        string(name: 'JFROG_REPOSITORY', defaultValue: 'images', description: 'Project name')
+        string(name: 'JFROG_IMAGE_TAG', defaultValue: 'latest', description: 'Gogs image tag')
     }
     stages {
-        stage('Checkout') { 
+        stage('Checkout') {
             steps {
-                git branch: '', credentialsId: '', url: ''
+                git branch: "${params.BRANCH}", credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
             }
         }
         stage('Init and Plan'){
 			steps {
 				script {
-                    def environmentGOGS = "${params.ENV}-${params.ENV_VARIABLE}-${params.REGION}-${params.ZONE}-${params.PROJECT_NAME}"
+                    def environmentGOGS = "${params.ENV}-${params.REGION}-${params.ZONE}-${params.PROJECT_NAME}"
                     echo "Selected environment GOGS: ${environmentGOGS}"
 					env.GOGS_ENV = environmentGOGS
                 }
-                withCredentials([string(credentialsId: '', variable: '')]) {
+                withCredentials([string(credentialsId: 'jfrog_password', variable: 'JFROG_PASSWORD')]) {
                     script {
                         env.TF_VAR_jfrog_password = "${JFROG_PASSWORD}"
                         env.TF_VAR_jfrog_registry = "${JFROG_REGISTRY}"
@@ -35,11 +35,11 @@ pipeline {
                     }
                 }
                 withCredentials([file(credentialsId: "values-v1-${params.ENV}", variable: 'VALUES')]) {
-			        dir('terraform/gogs-app/modules/gogs') { 
+			        dir('terraform/gogs-app/modules/gogs') {
 			            sh 'cat $VALUES > values-v1.yaml'
 			        }
                 }
-			    withCredentials([file(credentialsId: "GCP-SA-${params.ENV}", variable: 'GOOGLE_CREDENTIALS')]) {
+			    withCredentials([file(credentialsId: "terraform_creds", variable: 'GOOGLE_CREDENTIALS')]) {
 			        dir('terraform/gogs-app/environments') {
 			            sh 'make plan'
 			        }
@@ -48,9 +48,9 @@ pipeline {
 		}
 		stage('Approve'){
 			steps {
-			    withCredentials([file(credentialsId: "GCP-SA-${params.ENV}", variable: 'GOOGLE_CREDENTIALS')]) {
+			    withCredentials([file(credentialsId: "terraform_creds", variable: 'GOOGLE_CREDENTIALS')]) {
 			        dir('terraform/gogs-app/environments') {
-			            sh 'make apply'
+			            // sh 'make apply'
 			        }
 			    }
 			}
