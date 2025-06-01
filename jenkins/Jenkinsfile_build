@@ -22,43 +22,43 @@ pipeline {
                 }
             }
         }
-        stage('Docker Build') {
-            steps {
-                script {
-                    sh '''
-                    git clone --depth 1 https://github.com/gogs/gogs.git gogs
-                    cd gogs
-                    go build -o gogs
+        // stage('Docker Build') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //             git clone --depth 1 https://github.com/gogs/gogs.git gogs
+        //             cd gogs
+        //             go build -o gogs
 
-                    mv ../jenkins/Dockerfile ../
-                    cd ..
-                    docker build -t ${params.BUILDNAME}:${BUILD_NUMBER} .
-                    '''
-                }
-            }
-        }
-        stage('Docker Push') {
-         steps {
-                script {
-                    def hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+        //             mv ../jenkins/Dockerfile ../
+        //             cd ..
+        //             docker build -t ${params.BUILDNAME}:${BUILD_NUMBER} .
+        //             '''
+        //         }
+        //     }
+        // }
+        // stage('Docker Push') {
+        //  steps {
+        //         script {
+        //             def hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
 
-                    def imageTag = "${env.ARTIFACTORY_URL}/${params.ENV}-${params.BUILDNAME}-go-local/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
-                    sh "docker tag ${params.BUILDNAME}:$BUILD_NUMBER ${imageTag}"
+        //             def imageTag = "${env.ARTIFACTORY_URL}/${params.ENV}-${params.BUILDNAME}-go-local/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
+        //             sh "docker tag ${params.BUILDNAME}:$BUILD_NUMBER ${imageTag}"
                     
-                    withCredentials([usernamePassword(credentialsId: 'dcr-p-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ${env.ARTIFACTORY_DOMAIN}"
-                        sh "docker push ${imageTag}"
-                        sh "docker logout ${env.ARTIFACTORY_URL}"
-                    }
-                }
-            }
-        }
+        //             withCredentials([usernamePassword(credentialsId: 'dcr-p-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        //                 sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ${env.ARTIFACTORY_DOMAIN}"
+        //                 sh "docker push ${imageTag}"
+        //                 sh "docker logout ${env.ARTIFACTORY_URL}"
+        //             }
+        //         }
+        //     }
+        // }
     }
-    post {
-        always {
-            cleanWs()
-            sh 'docker system prune -a -f'
-            sh 'go clean -cache'
-        }
-    }
+    // post {
+    //     always {
+    //         cleanWs()
+    //         sh 'docker system prune -a -f'
+    //         sh 'go clean -cache'
+    //     }
+    // }
 }
