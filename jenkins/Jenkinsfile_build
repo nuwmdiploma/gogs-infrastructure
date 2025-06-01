@@ -19,7 +19,7 @@ pipeline {
         stage('Checkout') {
              steps {
                 script {
-                    git branch: 'env.BRANCH', credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
+                    git branch: '${params.BRANCH}', credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
                 }
             }
         }
