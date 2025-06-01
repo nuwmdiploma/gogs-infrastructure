@@ -34,7 +34,7 @@ pipeline {
                         env.TF_VAR_gogs_build_tag = "${JFROG_IMAGE_TAG}"
                     }
                 }
-                withCredentials([file(credentialsId: "values-v1-${params.ENV}", variable: 'VALUES')]) {
+                withCredentials([file(credentialsId: "values-${params.ENV}", variable: 'VALUES')]) {
 			        dir('terraform/gogs-app/modules/gogs') {
 			            sh 'cat $VALUES > values-v1.yaml'
 			        }
