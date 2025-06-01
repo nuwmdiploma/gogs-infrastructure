@@ -47,7 +47,7 @@ pipeline {
                 script {
                     def hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
 
-                    def imageTag = "${env.ARTIFACTORY_URL}/${params.BUILDNAME}-go-local/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
+                    def imageTag = "${env.ARTIFACTORY_URL}/${params.BUILDNAME}/${params.BUILDNAME}:$BUILD_NUMBER-${hash}"
                     sh "docker tag ${params.BUILDNAME}:$BUILD_NUMBER ${imageTag}"
 
                     withCredentials([usernamePassword(credentialsId: 'dcr-p-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
