@@ -1,10 +1,10 @@
 pipeline {
     agent any
-    //  tools {
-	// 	jfrog 'jfrog-cli'
-    //     go '1.22.4'
-    //     dockerTool 'docker'
-	// }
+     tools {
+		jfrog 'jfrog-cli'
+        go '1.22.4'
+        dockerTool 'docker'
+	}
     parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: 'Branch to pull changes')
         // choice(name: 'ENV', choices: [], description: 'Deployment environment')
