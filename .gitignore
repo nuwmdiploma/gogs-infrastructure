@@ -9,5 +9,6 @@
 *.terraform.lock*
 *.tflint.hcl
 **/.vscode/*
+**/.vs/*
 terraform/gogs-app/modules/gogs/helm/values-v1.yaml
 terraform/gogs-app/modules/gogs/values-v1.yaml
