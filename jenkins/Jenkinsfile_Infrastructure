@@ -4,7 +4,7 @@ pipeline {
       terraform 'terraform'
     }
 	parameters {
-        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to pull changes')
+        string(name: 'BRANCH', defaultValue: 'SCRUM-26', description: 'Branch to pull changes')
         choice(name: 'ENV', choices: ['DEV', 'STAGE', 'PROD'], description: 'Deployment environment')
 		choice(name: 'REGION', choices: ['us'], description: 'Select the region')
         choice(name: 'ZONE', choices: ['central1'], description: 'Select the zone')
