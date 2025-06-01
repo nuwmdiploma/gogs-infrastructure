@@ -19,6 +19,18 @@ pipeline {
                 git branch: "${params.BRANCH}", credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
             }
         }
+        stage('Preparation of data') {
+            steps {
+                steps {
+                    sh '''
+                    if ! [ -f terragrunt ]; then
+                    curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_amd64
+                    chmod +x terragrunt
+                    fi
+                    '''
+                 }
+            }
+        }
         stage('Init and Plan'){
 			steps {
 				script {
