@@ -6,8 +6,8 @@ pipeline {
 	parameters {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to pull changes')
         choice(name: 'ENV', choices: ['DEV', 'STAGE', 'PROD'], description: 'Deployment environment')
-		choice(name: 'REGION', choices: [us], description: 'Select the region')
-        choice(name: 'ZONE', choices: [central1], description: 'Select the zone')
+		choice(name: 'REGION', choices: ['us'], description: 'Select the region')
+        choice(name: 'ZONE', choices: ['central1'], description: 'Select the zone')
         string(name: 'PROJECT_NAME', defaultValue: 'gogs', description: 'Project name')
         string(name: 'JFROG_REGISTRY', defaultValue: 'jfrog.nuwm-diploma.pp.ua', description: 'Project name')
         string(name: 'JFROG_REPOSITORY', defaultValue: 'images', description: 'Project name')
