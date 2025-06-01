@@ -28,7 +28,7 @@ pipeline {
                 script {
                     sh '''
                         #!/usr/bin/env bash
-                        set -euxo pipefail
+                        set -eux
 
                         # 1) Clone and build Gogs
                         git clone --depth 1 https://github.com/gogs/gogs.git gogs
