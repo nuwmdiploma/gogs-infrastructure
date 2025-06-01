@@ -1,0 +1,58 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "gogsapp.fullname" . -}}
+{{- $svcPort := .Values.service.ports | first | default dict -}}
+{{- $httpPort := $svcPort.targetPort | default 3000 -}}
+
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "gogsapp.labels" . | nindent 4 }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ printf "%s" (regexReplaceAll "ENV" $value $.Values.env) | quote }}
+    {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ printf "%s" (regexReplaceAll "-01" (regexReplaceAll "ENV" . $.Values.env) "") | quote }}
+        {{- end }}
+      secretName: {{ printf "%s" (regexReplaceAll "ENV" .secretName $.Values.env) | quote }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ printf "%s" (regexReplaceAll "-01" (regexReplaceAll "ENV" .host $.Values.env) "") | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if .pathType }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port: 
+                  number: {{ .port }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ .port }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
+{{- end }}
