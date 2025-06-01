@@ -11,8 +11,9 @@ pipeline {
         // string(name: 'BUILDNAME', defaultValue: '', description: 'Build Name')
     }
     environment {
-        ARTIFACTORY_URL = credentials('docker-registry-url')
-        ARTIFACTORY_DOMAIN = credentials('docker-registry-domain')
+        BUILD_NUMBER = 0
+        // ARTIFACTORY_URL = credentials('docker-registry-url')
+        // ARTIFACTORY_DOMAIN = credentials('docker-registry-domain')
     }
     stages {
         stage('Checkout') {
@@ -22,21 +23,21 @@ pipeline {
                 }
             }
         }
-        // stage('Docker Build') {
-        //     steps {
-        //         script {
-        //             sh '''
-        //             git clone --depth 1 https://github.com/gogs/gogs.git gogs
-        //             cd gogs
-        //             go build -o gogs
+        stage('Docker Build') {
+            steps {
+                script {
+                    sh '''
+                    git clone --depth 1 https://github.com/gogs/gogs.git gogs
+                    cd gogs
+                    go build -o gogs
 
-        //             mv ../jenkins/Dockerfile ../
-        //             cd ..
-        //             docker build -t ${params.BUILDNAME}:${BUILD_NUMBER} .
-        //             '''
-        //         }
-        //     }
-        // }
+                    mv ../jenkins/Dockerfile ../
+                    cd ..
+                    docker build -t ${params.BUILDNAME}:${BUILD_NUMBER} .
+                    '''
+                }
+            }
+        }
         // stage('Docker Push') {
         //  steps {
         //         script {
