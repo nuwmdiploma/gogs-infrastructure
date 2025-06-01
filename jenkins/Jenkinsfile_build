@@ -55,11 +55,11 @@ pipeline {
         //     }
         // }
     }
-    // post {
-    //     always {
-    //         cleanWs()
-    //         sh 'docker system prune -a -f'
-    //         sh 'go clean -cache'
-    //     }
-    // }
+    post {
+        always {
+            cleanWs()
+            sh 'docker system prune -a -f'
+            sh 'go clean -cache'
+        }
+    }
 }
