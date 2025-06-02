@@ -1,8 +1,5 @@
 pipeline {
     agent any
-	tools {
-      terraform 'terraform'
-    }
 	parameters {
         string(name: 'BRANCH', defaultValue: 'SCRUM-26', description: 'Branch to pull changes')
         choice(name: 'ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
