@@ -6,8 +6,9 @@ pipeline {
 	parameters {
         string(name: 'BRANCH', defaultValue: 'SCRUM-26', description: 'Branch to pull changes')
         choice(name: 'ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
-		choice(name: 'REGION', choices: ['us'], description: 'Select the region')
-        choice(name: 'ZONE', choices: ['central1'], description: 'Select the zone')
+        string(name: 'ENV_VARIABLE', defaultValue: '01', description: 'ENV Variable')
+		choice(name: 'REGION', choices: ['europe'], description: 'Select the region')
+        choice(name: 'ZONE', choices: ['west4'], description: 'Select the zone')
         string(name: 'PROJECT_NAME', defaultValue: 'gogs', description: 'Project name')
         string(name: 'JFROG_REGISTRY', defaultValue: 'jfrog.nuwm-diploma.pp.ua', description: 'Project name')
         string(name: 'JFROG_REPOSITORY', defaultValue: 'images', description: 'Project name')
@@ -32,7 +33,7 @@ pipeline {
         stage('Init and Plan'){
 			steps {
 				script {
-                    def environmentGOGS = "${params.ENV}-${params.REGION}-${params.ZONE}-${params.PROJECT_NAME}"
+                    def environmentGOGS = "${params.ENV}-${params.ENV_VARIABLE}-${params.REGION}-${params.ZONE}-${params.PROJECT_NAME}"
                     echo "Selected environment GOGS: ${environmentGOGS}"
 					env.GOGS_ENV = environmentGOGS
                 }
