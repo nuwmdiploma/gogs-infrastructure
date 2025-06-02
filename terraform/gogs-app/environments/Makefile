@@ -1,10 +1,12 @@
-ENV?=prod-01
-GOGS_ENV?=prod-01-europe-west4-gogs
-WORK_DIR=${GOGS_ENV}/gogs 
+export ENV ?=prod-01
+export GOGS_ENV ?=prod-01-europe-west4-gogs
+export WORK_DIR =${GOGS_ENV}/gogs
 init:
-	terragrunt init --terragrunt-working-dir ${WORK_DIR}
+	terragrunt init -working-dir ${WORK_DIR}
+	echo "GOGS_ENV is $$GOGS_ENV"
 plan: init
-	terragrunt plan --terragrunt-working-dir ${WORK_DIR}
+	echo "GOGS_ENV is $$GOGS_ENV"
+	terragrunt plan -working-dir ${WORK_DIR}
 apply: init
 	terragrunt apply --terragrunt-working-dir ${WORK_DIR}
 destroy: init

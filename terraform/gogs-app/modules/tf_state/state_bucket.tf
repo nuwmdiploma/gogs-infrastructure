@@ -4,7 +4,7 @@ data "google_compute_network" "default" {
 
 
 resource "google_storage_bucket" "terraform_state_bucket" {
-  name          = "${var.env}-${var.region}-gogs-state-bucket"
+  name          = "${var.env}-${var.region}-gogs-bucket"
   force_destroy = true
   location      = var.region
   storage_class = "STANDARD"
