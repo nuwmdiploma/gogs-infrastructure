@@ -27,6 +27,7 @@ pipeline {
                 curl -L -o terragrunt https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_amd64
                 chmod +x terragrunt
                 fi
+                export PATH=$PATH:$(pwd)
                 '''
             }
         }
@@ -52,7 +53,7 @@ pipeline {
                 }
 			    withCredentials([file(credentialsId: "terraform_creds", variable: 'GOOGLE_CREDENTIALS')]) {
 			        dir('terraform/gogs-app/environments') {
-			            sh 'make plan'
+			            sh 'export PATH=$PATH:$(pwd) && make plan'
 			        }
 			    }
 			}
