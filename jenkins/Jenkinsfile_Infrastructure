@@ -20,6 +20,17 @@ pipeline {
                 git branch: "${params.BRANCH}", credentialsId: 'jenkins-ssh-git-key', url: 'git@github.com:nuwmdiploma/gogs-infrastructure.git'
             }
         }
+        stage('Verify Tools') {
+            steps {
+                sh '''
+                echo $PATH
+                which terraform
+                terraform version
+                which terragrunt
+                terragrunt --version
+                '''
+            }
+        }
         stage('Init and Plan'){
 			steps {
 				script {
