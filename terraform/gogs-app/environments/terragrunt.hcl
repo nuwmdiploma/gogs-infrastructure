@@ -4,7 +4,6 @@ config = {
     bucket = "${get_env("GOGS_ENV", "prod-01-europe-west4-gogs")}-bucket"
     prefix = "terraform/gogs-state"
     project        = "diploma-459419"
-    region         = "europe-west4"
   }
 generate = {
     path      = "backend.tf"
