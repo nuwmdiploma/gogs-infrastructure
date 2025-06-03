@@ -28,5 +28,5 @@ inputs = {
     project = "diploma-459419" 
     zone = "us-central1-c"
     machine_type = "e2-medium"
-    helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm/helm-gogs-local"
+    helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm-gogs-local"
 }
