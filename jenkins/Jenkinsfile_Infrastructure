@@ -2,6 +2,7 @@ pipeline {
     agent any
 	parameters {
         string(name: 'BRANCH', defaultValue: 'SCRUM-28', description: 'Branch to pull changes')
+        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Deployment environment')
         choice(name: 'ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
         string(name: 'ENV_VARIABLE', defaultValue: '01', description: 'ENV Variable')
 		choice(name: 'REGION', choices: ['europe'], description: 'Select the region')
@@ -59,7 +60,7 @@ pipeline {
 			steps {
 			    withCredentials([file(credentialsId: "terraform_creds", variable: 'GOOGLE_CREDENTIALS')]) {
 			        dir('terraform/gogs-app/environments') {
-			            sh 'make apply'
+			            sh 'make ${params.ENV}'
 			        }
 			    }
 			}
