@@ -20,6 +20,6 @@ terraform {
 
 inputs = {
     env = "dev-01"
-    region = "europe-west4"
+    region = "us-central1"
     project = "diploma-459419"
 }
