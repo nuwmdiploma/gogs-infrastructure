@@ -20,11 +20,10 @@ resource "google_container_node_pool" "gogs_node_pool" {
   node_config {
     preemptible  = true
     machine_type = var.machine_type
-    disk_size_gb = 10
+    disk_size_gb = 20
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
   }
 }
-
