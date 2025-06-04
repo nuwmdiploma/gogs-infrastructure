@@ -34,7 +34,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: jfrog.nuwm-diploma.pp.ua/gogs/images/2-8d5ecea
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
