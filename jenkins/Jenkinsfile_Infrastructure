@@ -9,8 +9,8 @@ pipeline {
         choice(name: 'ZONE', choices: ['central1'], description: 'Select the zone')
         string(name: 'PROJECT_NAME', defaultValue: 'gogs', description: 'Project name')
         string(name: 'JFROG_REGISTRY', defaultValue: 'jfrog.nuwm-diploma.pp.ua', description: 'Project name')
-        string(name: 'JFROG_REPOSITORY', defaultValue: 'images', description: 'Project name')
-        string(name: 'JFROG_IMAGE_TAG', defaultValue: 'latest', description: 'Gogs image tag')
+        string(name: 'JFROG_REPOSITORY', defaultValue: 'gogs-virtual/images', description: 'Project name')
+        string(name: 'JFROG_IMAGE_TAG', defaultValue: '2-8d5ecea', description: 'Gogs image tag')
     }
     stages {
         stage('Checkout') {
