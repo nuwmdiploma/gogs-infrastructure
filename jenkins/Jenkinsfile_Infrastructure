@@ -2,7 +2,7 @@ pipeline {
     agent any
 	parameters {
         string(name: 'BRANCH', defaultValue: 'SCRUM-28', description: 'Branch to pull changes')
-        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Deployment environment')
+        choice(name: 'ACTION', choices: ['apply','plan', 'destroy'], description: 'Deployment environment')
         choice(name: 'ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
         string(name: 'ENV_VARIABLE', defaultValue: '01', description: 'ENV Variable')
 		choice(name: 'REGION', choices: ['us'], description: 'Select the region')
