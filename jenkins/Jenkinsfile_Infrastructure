@@ -60,7 +60,7 @@ pipeline {
 			steps {
 			    withCredentials([file(credentialsId: "terraform_creds", variable: 'GOOGLE_CREDENTIALS')]) {
 			        dir('terraform/gogs-app/environments') {
-			            sh 'make apply'
+			            sh "make ${params.ACTION}"
 			        }
 			    }
 			}
