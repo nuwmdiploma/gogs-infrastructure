@@ -14,7 +14,7 @@ image:
   rootless: false
   fullOverride: ""
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag:
 imagePullSecrets:
   - name: jfrogcred
 nameOverride: ""
@@ -63,19 +63,21 @@ service:
       value: ${GOGS_DB_USER}
     - name: MYSQL_PASSWORD
       value: ${GOGS_DB_PASS}
+    - name: ROOT_URL
+      value: https://gogs-prod.nuwm-diploma.pp.ua/
 
 
 ingress:
   enabled: true
   className: "gce"
-  annotations: 
+  annotations:
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.global-static-ip-name: "gogs-ENV-ip"
   hosts:
     - host: gogs-ENV.nuwm-diploma.pp.ua
       paths:
-        - path: /*
-          pathType: ImplementationSpecific
+        - path: /
+          pathType: Prefix
           port: 3000
   tls:
     - secretName: ENV-gogs-tls

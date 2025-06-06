@@ -1,4 +1,4 @@
-GEO_ENV ?= us-central1-jcr
+GEO_ENV ?= europe-central2-jcr
 
 init:
 	terraform init
