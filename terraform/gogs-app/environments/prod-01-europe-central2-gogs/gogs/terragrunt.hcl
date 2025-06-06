@@ -23,10 +23,10 @@ include {
 }
 
 inputs = {
-    env = "dev-01"
-    region = "us-central1"
+    env = "prod-01"
+    region = "europe-central2"
     project = "diploma-459419" 
-    zone = "us-central1-c"
-    machine_type = "n2d-highcpu-2"
-    helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm/helm-gogs-local"
+    zone = "europe-central2-c"
+    machine_type = "e2-medium"
+    helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm/helm-gogs-vt"
 }

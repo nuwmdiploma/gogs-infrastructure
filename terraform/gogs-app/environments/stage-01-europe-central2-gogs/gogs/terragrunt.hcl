@@ -24,9 +24,9 @@ include {
 
 inputs = {
     env = "stage-01"
-    region = "us-central1"
+    region = "europe-central2"
     project = "diploma-459419" 
-    zone = "us-central1-c"
+    zone = "europe-central2-c"
     machine_type = "e2-medium"
     helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm/helm-gogs-local"
 }

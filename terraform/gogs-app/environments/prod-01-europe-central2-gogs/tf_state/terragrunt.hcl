@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../modules/gogs"
+  source = "../../../modules/tf_state"
 
   extra_arguments "custom_args" {
     commands = [
@@ -18,15 +18,8 @@ terraform {
   }
 }
 
-include {
-  path = find_in_parent_folders()
-}
-
 inputs = {
     env = "prod-01"
-    region = "us-central1"
+    region = "europe-central2"
     project = "diploma-459419" 
-    zone = "us-central1-c"
-    machine_type = "e2-medium"
-    helm_repo = "https://jfrog.nuwm-diploma.pp.ua/artifactory/api/helm/helm-gogs-vt"
 }

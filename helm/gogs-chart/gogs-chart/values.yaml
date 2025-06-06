@@ -14,7 +14,7 @@ image:
   rootless: false
   fullOverride: ""
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag:
 imagePullSecrets:
   - name: jfrogcred
 nameOverride: ""
